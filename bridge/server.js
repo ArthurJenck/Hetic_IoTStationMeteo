@@ -12,9 +12,23 @@ const clients = new Set();
 // === TEST MODE ===
 function generateWeatherData() {
   return {
-    temp: Math.floor(Math.random() * 30) + 5,
-    unite: "°C",
-    humidity: Math.floor(Math.random() * 60) + 30,
+    weather: {
+      deviceId: "esp32-01",
+      ts: 1736080000,
+      humidity: {
+        unit: "%",
+        value: Math.floor(Math.random() * 60) + 30,
+      },
+      temperature: {
+        unit: "F",
+        value: Math.floor(Math.random() * 30) + 5,
+      },
+    },
+    status: {
+      deviceId: "esp32-01",
+      ts: 1736080000,
+      status: "Healthy",
+    },
   };
 }
 
