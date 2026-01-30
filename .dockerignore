@@ -1,0 +1,42 @@
+# Dépendances
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Environnement
+.env
+.env.local
+.env.*.local
+
+# Git
+.git
+.gitignore
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Documentation
+README.md
+*.md
+
+# IDE et éditeurs
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# front
+front/node_modules
+
+# Logs
+*.log
+logs
+*.tmp
+.DS_Store
+
+# Cache
+.cache
+.npm
