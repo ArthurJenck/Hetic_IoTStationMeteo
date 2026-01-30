@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <DHT.h>
 #include <TempReader.h>
+#include <WifiConnection.h>
 
 // Define LEDs
 #define RED_LED 25
@@ -16,9 +17,16 @@
 #define BUTTON_LED 33
 #define BUTTON_DEV 32
 
+// Define WiFi auth
+#define SSID "iCellulaire"
+#define PASS "mBi540816"
+
 bool tempType = false;
 
 TempReader* dht;
+
+WifiConnection* wifi;
+
 
 void switchtTemp();
 
@@ -35,6 +43,9 @@ void setup() {
 
   // Setup DHT
   dht = new TempReader(DHT_Pin, DHT_Type);
+
+  // Connect to WiFi
+  wifi = new WifiConnection(SSID, PASS);
 }
 
 void loop() {
