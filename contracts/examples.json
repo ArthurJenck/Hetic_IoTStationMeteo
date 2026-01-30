@@ -1,15 +1,15 @@
 {
-  "telemetry": {
+  "weather": {
     "deviceId": "esp32-01",
-    "ts": 1736080000
-  },
-  "temp": {
-    "unit": "F",
-    "value": 17.0
-  },
-  "humi": {
-    "unit": "%",
-    "value": 48.1
+    "ts": 1736080000,
+    "humidity": {
+      "unit": "%",
+      "value": 48.1
+    },
+    "temperature": {
+      "unit": "F",
+      "value": 17.0
+    },
   },
   "status": {
     "deviceId": "esp32-01",
