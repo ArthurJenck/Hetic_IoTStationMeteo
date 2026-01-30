@@ -1,2 +1,2 @@
 export { useWebSocket } from './use-websocket';
-export type { ConnectionStatus, SensorData, WSMessage } from './types';
+export type { ConnectionStatus, WeatherData, WSMessage } from './types';

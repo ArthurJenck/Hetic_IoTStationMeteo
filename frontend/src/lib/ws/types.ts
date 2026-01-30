@@ -1,12 +1,14 @@
 export type ConnectionStatus = 'connecting' | 'connected' | 'disconnected';
 
-export type SensorData = {
-  temperature: number;
+// Format envoyé par le bridge
+export type WeatherData = {
+  temp: number;
+  unite: string;
   humidity: number;
-  timestamp: number;
 };
 
 export type WSMessage = {
-  type: 'sensor_data' | 'ping' | 'pong' | 'error';
-  payload: SensorData | null;
+  topic: string;
+  data: WeatherData;
+  timestamp: number;
 };

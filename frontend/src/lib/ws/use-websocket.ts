@@ -2,17 +2,17 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-import type { ConnectionStatus, SensorData, WSMessage } from './types';
+import type { ConnectionStatus, WeatherData, WSMessage } from './types';
 
-const WS_URL = 'ws://localhost:3001';
+const WS_URL = 'ws://localhost:8080';
 
 export function useWebSocket() {
   const [status, setStatus] = useState<ConnectionStatus>('connecting');
-  const [sensorData, setSensorData] = useState<SensorData | null>(null);
+  const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
+  const [timestamp, setTimestamp] = useState<number | null>(null);
   const wsRef = useRef<WebSocket | null>(null);
 
   useEffect(() => {
-    // Créer la connexion WebSocket
     const ws = new WebSocket(WS_URL);
     wsRef.current = ws;
 
@@ -33,26 +33,22 @@ export function useWebSocket() {
     ws.onmessage = (event) => {
       try {
         const message: WSMessage = JSON.parse(event.data);
+        console.log('Message reçu:', message);
 
-        if (message.type === 'sensor_data' && message.payload) {
-          setSensorData(message.payload);
-        }
-
-        if (message.type === 'ping') {
-          ws.send(JSON.stringify({ type: 'pong', payload: null }));
+        if (message.data) {
+          setWeatherData(message.data);
+          setTimestamp(message.timestamp);
         }
       } catch (error) {
         console.error('Erreur parsing message:', error);
       }
     };
 
-    // Nettoyage
     return () => {
       ws.close();
     };
   }, []);
 
-  // Reconnecter manuellement
   function reconnect() {
     if (wsRef.current) {
       wsRef.current.close();
@@ -62,23 +58,16 @@ export function useWebSocket() {
     wsRef.current = ws;
     setStatus('connecting');
 
-    ws.onopen = () => {
-      setStatus('connected');
-    };
-
-    ws.onclose = () => {
-      setStatus('disconnected');
-    };
-
-    ws.onerror = (error) => {
-      console.error('Erreur WebSocket:', error);
-    };
+    ws.onopen = () => setStatus('connected');
+    ws.onclose = () => setStatus('disconnected');
+    ws.onerror = (error) => console.error('Erreur WebSocket:', error);
 
     ws.onmessage = (event) => {
       try {
         const message: WSMessage = JSON.parse(event.data);
-        if (message.type === 'sensor_data' && message.payload) {
-          setSensorData(message.payload);
+        if (message.data) {
+          setWeatherData(message.data);
+          setTimestamp(message.timestamp);
         }
       } catch (error) {
         console.error('Erreur parsing message:', error);
@@ -86,7 +75,6 @@ export function useWebSocket() {
     };
   }
 
-  // Déconnecter
   function disconnect() {
     if (wsRef.current) {
       wsRef.current.close();
@@ -96,7 +84,8 @@ export function useWebSocket() {
 
   return {
     status,
-    sensorData,
+    weatherData,
+    timestamp,
     connect: reconnect,
     disconnect,
   };
