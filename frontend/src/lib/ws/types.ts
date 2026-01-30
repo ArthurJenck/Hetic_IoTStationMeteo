@@ -1,14 +1,44 @@
 export type ConnectionStatus = 'connecting' | 'connected' | 'disconnected';
 
-// Format envoyé par le bridge
+export type SensorValue = {
+  unit: string;
+  value: number;
+};
+
+export type WeatherInfo = {
+  deviceId: string;
+  ts: number;
+  humidity: SensorValue;
+  temperature: SensorValue;
+};
+
+export type DeviceStatus = {
+  deviceId: string;
+  ts: number;
+  status: string;
+};
+
 export type WeatherData = {
-  temp: number;
-  unite: string;
-  humidity: number;
+  weather: WeatherInfo;
+  status: DeviceStatus | null;
+};
+
+// Format des données brutes du capteur (mode réel)
+export type RawSensorData = {
+  device_id: string;
+  ts: number;
+  humidity: SensorValue;
+  temperature: SensorValue;
+};
+
+// Format des données en mode test
+export type TestModeData = {
+  weather: WeatherInfo;
+  status: DeviceStatus;
 };
 
 export type WSMessage = {
   topic: string;
-  data: WeatherData;
+  data: RawSensorData | TestModeData;
   timestamp: number;
 };
