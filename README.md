@@ -34,17 +34,17 @@ node server.js --test
 
 ### 1. Préparation (sans matériel)
 
-- [V] Définir le schéma de câblage
-- [V] Choisir les pins GPIO
-- [V] Définir le format JSON des messages
-- [V] Définir les topics MQTT
+- [x] Définir le schéma de câblage
+- [x] Choisir les pins GPIO
+- [x] Définir le format JSON des messages
+- [x] Définir les topics MQTT
 
 ### 2. Code ESP32 — Mode simulation
 
 - [ ] Implémenter la génération de données fictives
 - [ ] Implémenter le bouton avec debounce
 - [ ] Implémenter les LEDs indicatrices
-- [V] Tester sur TinkerCAD
+- [x] Tester sur TinkerCAD
 
 ### 3. Communication MQTT
 
@@ -55,13 +55,13 @@ node server.js --test
 
 ### 4. Interface web
 
-- [V] Bridge MQTT → WebSocket
-- [V] Page HTML avec affichage temps réel
+- [x] Bridge MQTT → WebSocket
+- [x] Page HTML avec affichage temps réel
 - [ ] (Bonus) Bouton pour changer l'unité
 
 ### 5. Intégration DHT22
 
-- [V] Emprunter un capteur
+- [x] Emprunter un capteur
 - [ ] Adapter le code pour lecture réelle
 - [ ] Valider le fonctionnement complet
 
