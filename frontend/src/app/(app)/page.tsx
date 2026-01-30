@@ -1,5 +1,6 @@
 "use client"
 
+import { Switch } from '@/components/shadcn-ui/switch';
 import { formatTime } from '@/lib/utils/date';
 import { useWebSocket } from '@/lib/ws';
 
@@ -16,9 +17,11 @@ export default function HomePage() {
     weatherData,
     timestamp,
     isCelsius,
+    isTestMode,
     connect,
     disconnect,
     setTemperatureUnit,
+    setMode,
   } = useWebSocket();
 
   const isConnected = status === 'connected';
@@ -35,6 +38,17 @@ export default function HomePage() {
       />
 
       {deviceStatus && <DeviceInfo deviceStatus={deviceStatus} />}
+
+      <div className="flex items-center justify-center gap-2 text-sm text-slate-400">
+        <span>Vrai data</span>
+        <Switch
+          checked={isTestMode}
+          onCheckedChange={setMode}
+          disabled={!isConnected}
+          size="sm"
+        />
+        <span>Fake data</span>
+      </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <TemperatureCard

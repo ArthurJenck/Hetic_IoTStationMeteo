@@ -11,6 +11,7 @@ export function useWebSocket() {
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
   const [timestamp, setTimestamp] = useState<number | null>(null);
   const [isCelsius, setIsCelsius] = useState(true);
+  const [isTestMode, setIsTestMode] = useState(false);
   const wsRef = useRef<WebSocket | null>(null);
 
   useEffect(() => {
@@ -95,13 +96,27 @@ export function useWebSocket() {
     }
   }
 
+  function setMode(mode: boolean) {
+    setIsTestMode(mode);
+    if (wsRef.current?.readyState === WebSocket.OPEN) {
+      wsRef.current.send(
+        JSON.stringify({
+          topic: 'weather/mode',
+          data: { mode },
+        })
+      );
+    }
+  }
+
   return {
     status,
     weatherData,
     timestamp,
     isCelsius,
+    isTestMode,
     connect: reconnect,
     disconnect,
     setTemperatureUnit,
+    setMode,
   };
 }
