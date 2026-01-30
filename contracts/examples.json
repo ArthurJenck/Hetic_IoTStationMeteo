@@ -20,6 +20,6 @@
     "unit": true
   },
   "mode": {
-    "mode": "simu"
+    "mode": true
   }
 }

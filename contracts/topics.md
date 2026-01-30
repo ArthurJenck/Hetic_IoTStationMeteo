@@ -1,6 +1,6 @@
 # Topic & Payload
 
-Prefix: `weather/<deviceId>/`
+Prefix: `weather/`
 
 | Topic     | Sens       | Émis par      | Payload      |
 | --------- | ---------- | ------------- | ------------ |
