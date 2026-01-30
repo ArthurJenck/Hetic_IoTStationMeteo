@@ -10,6 +10,14 @@ IoT school project. The goal is to create a independant minimalist weather stati
 - Louis Dondey
 - Maxime Bidan
 
+## Bonus
+
+A draft of our wiring in Three.js is available on
+
+```
+/docs/tinkercad/tinkercad-threejs
+```
+
 ## Bridge
 
 ### Run local:
