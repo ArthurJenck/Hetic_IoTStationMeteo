@@ -94,19 +94,40 @@ gltfLoader.load('/models/esp32.glb', (gltf) => {
     model.position.set(-2.6, 0.215, 0.083)
     model.rotation.y = Math.PI / 2
 
+    scene.add(model)
+})
+
+gltfLoader.load('/models/dht22.glb', (gltf) => {
+    const model = gltf.scene
+
+    model.scale.setScalar(30)
+
     gui.add(model.scale, 'x')
         .min(1)
-        .max(2)
+        .max(30)
         .step(0.001)
         .onChange((value) => {
             model.scale.setScalar(value)
         })
 
-    gui.add(model.position, 'x').min(-3).max(5).step(0.001)
-    gui.add(model.position, 'y').min(-3).max(5).step(0.001)
-    gui.add(model.position, 'z').min(-3).max(5).step(0.001)
+    model.rotation.x = 0.36
+    model.rotation.z = -0.275
 
-    scene.add(model)
+    model.position.y = 0.89
+
+    const modelGroup = new THREE.Group()
+    modelGroup.add(model)
+
+    modelGroup.rotation.y = -Math.PI / 2
+
+    modelGroup.position.x = 2.62
+    modelGroup.position.z = 0.95
+
+    gui.add(modelGroup.position, 'x').min(-5).max(5).step(0.001)
+    gui.add(modelGroup.position, 'y').min(-5).max(5).step(0.001)
+    gui.add(modelGroup.position, 'z').min(-5).max(5).step(0.001)
+
+    scene.add(modelGroup)
 })
 
 /**
