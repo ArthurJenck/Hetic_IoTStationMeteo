@@ -1,10 +1,10 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-
 import type { ConnectionStatus, WeatherData, WSMessage } from './types';
+import { env } from '@/lib/config/env';
 
-const WS_URL = 'ws://localhost:8080';
+const WS_URL = env.NEXT_PUBLIC_WS_URL;
 
 export function useWebSocket() {
   const [status, setStatus] = useState<ConnectionStatus>('connecting');
@@ -82,11 +82,23 @@ export function useWebSocket() {
     }
   }
 
+  function setTemperatureUnit(celsius: boolean) {
+    if (wsRef.current?.readyState === WebSocket.OPEN) {
+      wsRef.current.send(
+        JSON.stringify({
+          topic: 'weather/unit',
+          data: { celsius },
+        })
+      );
+    }
+  }
+
   return {
     status,
     weatherData,
     timestamp,
     connect: reconnect,
     disconnect,
+    setTemperatureUnit,
   };
 }
