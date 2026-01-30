@@ -20,11 +20,25 @@ export type DeviceStatus = {
 
 export type WeatherData = {
   weather: WeatherInfo;
+  status: DeviceStatus | null;
+};
+
+// Format des données brutes du capteur (mode réel)
+export type RawSensorData = {
+  device_id: string;
+  ts: number;
+  humidity: SensorValue;
+  temperature: SensorValue;
+};
+
+// Format des données en mode test
+export type TestModeData = {
+  weather: WeatherInfo;
   status: DeviceStatus;
 };
 
 export type WSMessage = {
   topic: string;
-  data: WeatherData;
+  data: RawSensorData | TestModeData;
   timestamp: number;
 };
