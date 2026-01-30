@@ -2,7 +2,9 @@ const WebSocket = require("ws");
 const mqtt = require("mqtt");
 
 const TEST_MODE = process.argv.includes("--test");
-const LOCAL_MQTT_URL = "mqtt://localhost:1883";
+const MQTT_HOST = process.env.MQTT_HOST || "localhost";
+const MQTT_PORT = process.env.MQTT_PORT || 1883;
+const LOCAL_MQTT_URL = `mqtt://${MQTT_HOST}:${MQTT_PORT}`;
 const REMOTE_MQTT_URL = "mqtt://captain.dev0.pandor.cloud:1884";
 const WS_PORT = 8080;
 
