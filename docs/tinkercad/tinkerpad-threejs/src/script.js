@@ -102,14 +102,6 @@ gltfLoader.load('/models/dht22.glb', (gltf) => {
 
     model.scale.setScalar(30)
 
-    gui.add(model.scale, 'x')
-        .min(1)
-        .max(30)
-        .step(0.001)
-        .onChange((value) => {
-            model.scale.setScalar(value)
-        })
-
     model.rotation.x = 0.36
     model.rotation.z = -0.275
 
@@ -123,11 +115,28 @@ gltfLoader.load('/models/dht22.glb', (gltf) => {
     modelGroup.position.x = 2.62
     modelGroup.position.z = 0.95
 
-    gui.add(modelGroup.position, 'x').min(-5).max(5).step(0.001)
-    gui.add(modelGroup.position, 'y').min(-5).max(5).step(0.001)
-    gui.add(modelGroup.position, 'z').min(-5).max(5).step(0.001)
-
     scene.add(modelGroup)
+})
+
+gltfLoader.load('/models/led.glb', (gltf) => {
+    const model = gltf.scene
+
+    model.scale.setScalar(0.095)
+    model.rotation.y = Math.PI / 2
+
+    gui.add(model.scale, 'x')
+        .min(0)
+        .max(1)
+        .step(0.001)
+        .onChange((value) => {
+            model.scale.setScalar(value)
+        })
+
+    gui.add(model.position, 'x').min(-5).max(5).step(0.001)
+    gui.add(model.position, 'y').min(-5).max(5).step(0.001)
+    gui.add(model.position, 'z').min(-5).max(5).step(0.001)
+
+    scene.add(model)
 })
 
 /**
