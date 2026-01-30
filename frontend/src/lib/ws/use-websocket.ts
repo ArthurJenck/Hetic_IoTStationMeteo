@@ -41,13 +41,17 @@ export function useWebSocket() {
 
   function handleMessage(event: MessageEvent) {
     try {
-      const message: WSMessage = JSON.parse(event.data);
+      const message = JSON.parse(event.data);
       console.log('Message reçu:', message);
 
       if (message.data) {
         const normalized = normalizeWeatherData(message.data);
         setWeatherData(normalized);
         setTimestamp(message.timestamp);
+      }
+
+      if ('mode' in message) {
+        setIsTestMode(message.mode);
       }
     } catch (error) {
       console.error('Erreur parsing message:', error);
