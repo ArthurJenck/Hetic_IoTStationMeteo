@@ -50,7 +50,7 @@ function broadcastTestWeather() {
 }
 
 if (TEST_MODE) {
-  console.log("Running in TEST MODE - sending simulated weather data every 3s");
+  console.log("Running in TEST MODE");
   setInterval(broadcastTestWeather, 3000);
 }
 
