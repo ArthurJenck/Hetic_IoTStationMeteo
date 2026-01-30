@@ -87,7 +87,7 @@ export function useWebSocket() {
       wsRef.current.send(
         JSON.stringify({
           topic: 'weather/unit',
-          data: { celsius },
+          data: { "unit": celsius },
         })
       );
     }
