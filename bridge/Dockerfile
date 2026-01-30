@@ -10,7 +10,6 @@ RUN addgroup -S nodejs && adduser -S iotheticuser -G nodejs
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/server.js ./
-COPY --from=builder /app/config ./config
 USER iotheticuser
-EXPOSE 3000
+EXPOSE 8080
 CMD ["node", "server.js"]
