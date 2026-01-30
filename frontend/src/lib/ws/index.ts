@@ -5,5 +5,7 @@ export type {
   WeatherInfo,
   DeviceStatus,
   WeatherData,
+  RawSensorData,
+  TestModeData,
   WSMessage,
 } from './types';
