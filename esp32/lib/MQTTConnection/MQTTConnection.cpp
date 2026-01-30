@@ -35,5 +35,13 @@ void MQTTConnection::sendMessage(const StaticJsonDocument<256> doc) {
 
     bool status = mqttConn.publish(_MQTT_TOPIC.c_str(), payload, n);
 
-    Serial.println("[MQTT]" + status ? "Data send" : "Error sending data");
+    if (status) {
+        Serial.println("[MQTT] Data sent");
+    } else {
+        Serial.println("[MQTT] Error sending data");
+    }
+}
+
+void MQTTConnection::loop() {
+    mqttConn.loop();
 }

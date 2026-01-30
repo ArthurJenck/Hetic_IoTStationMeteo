@@ -23,7 +23,7 @@
 #define PASS "mBi540816"
 
 // Define MQTT
-#define MQTT_HOST "172.20.48.1"
+#define MQTT_HOST "172.20.10.11"
 #define MQTT_PORT 1883
 #define MQTT_TOPIC "weather/"
 #define DEVICE_ID "esp32_01"
@@ -36,6 +36,10 @@ WifiConnection* wifi;
 
 MQTTConnection* mqtt;
 
+unsigned long lastButtonPress = 0;
+const unsigned long debounceDelay = 500;
+bool lastButtonState = HIGH;
+bool buttonState = HIGH;
 
 void switchtTemp();
 
@@ -43,45 +47,73 @@ void setup() {
   Serial.begin(115200);
   
   // Setup LEDs
-  // pinMode(RED_LED, OUTPUT);
-  // pinMode(GREEN_LED, OUTPUT);
+  pinMode(RED_LED, OUTPUT);
+  pinMode(GREEN_LED, OUTPUT);
 
   // Setup Buttons
-  pinMode(BUTTON_LED, OUTPUT);
-  pinMode(BUTTON_DEV, OUTPUT);
+  pinMode(BUTTON_LED, INPUT_PULLUP);
+  pinMode(BUTTON_DEV, INPUT_PULLUP);
 
   // Setup DHT
-  dht = new TempReader(DHT_Pin, DHT_Type, false, true);
+  dht = new TempReader(DHT_Pin, DHT_Type);
 
   // Connect to WiFi
   wifi = new WifiConnection(SSID, PASS);
 
   // Connect to MQTT
   mqtt = new MQTTConnection(MQTT_HOST, MQTT_PORT, MQTT_TOPIC);
+
+  if (dht->getUnit() == "C") {
+    digitalWrite(RED_LED, HIGH);
+    digitalWrite(GREEN_LED, LOW);
+  } else {
+    digitalWrite(RED_LED, LOW);
+    digitalWrite(GREEN_LED, HIGH);
+  }
 }
 
 void loop() {
+
+  mqtt->loop();
+
+  buttonState = digitalRead(BUTTON_LED);
+
+  if (buttonState == LOW && lastButtonState == HIGH) {
+    unsigned long currentTime = millis();
+    if (currentTime - lastButtonPress >= debounceDelay) {
+      lastButtonPress = currentTime;
+      
+      dht->switchUnit();
+      
+      // Switch LEDs: rouge = Celsius, vert = Fahrenheit
+      if (dht->getUnit() == "C") {
+        digitalWrite(RED_LED, HIGH);
+        digitalWrite(GREEN_LED, LOW);
+      } else {
+        digitalWrite(RED_LED, LOW);
+        digitalWrite(GREEN_LED, HIGH);
+      }
+    }
+  }
+
+  lastButtonState = buttonState;
+
   const float temp = dht->getTemp();
   const String unit = dht->getUnit();
-
-  Serial.print(temp);
-  Serial.println(unit);
 
   StaticJsonDocument<256> doc;
   doc["device_id"] = DEVICE_ID;
   doc["ts"] = millis();
+  
   JsonObject humidity = doc.createNestedObject("humidity");
   humidity["unit"] = "%";
   humidity["value"] = 48.1;
+  
   JsonObject temperature = doc.createNestedObject("temperature");
-  temperature["unit"] = "F";
-  temperature["value"] = 17.0;
+  temperature["unit"] = unit;
+  temperature["value"] = temp;
 
   mqtt->sendMessage(doc);
 
   delay(2000);
-}
-
-void switchTemp() {
-  tempType = !tempType;
 }
