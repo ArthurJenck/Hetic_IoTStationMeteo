@@ -7,11 +7,15 @@
 
 #define TMP_PIN A0
 
+const unsigned long DEBOUNCE_DELAY = 50;
+
 bool previousTempToggleButton = HIGH;
 bool showFarenheit = false;
+unsigned long lastTempToggleTime = 0;
 
 bool previousSimModeButton = HIGH;
 bool simModeForced = false;
+unsigned long lastSimToggleTime = 0; 
 
 bool sensorValid(double tempC) {
   return tempC > -40 && tempC < 125;
@@ -30,17 +34,25 @@ void setup() {
 }
 
 void loop() {
+  unsigned long now = millis();
+  
   // Toggle temp unit when button clicked
   bool tempToggleButton = digitalRead(TEMP_TOGGLE_PIN);
   if (previousTempToggleButton == HIGH && tempToggleButton == LOW) {
-    showFarenheit = !showFarenheit;
+    if (now - lastTempToggleTime > DEBOUNCE_DELAY) {
+      showFarenheit = !showFarenheit;
+      lastTempToggleTime = now;
+    }
   }
   previousTempToggleButton = tempToggleButton;
   
   // Toggle simulation mode when button clicked
   bool simModeButton = digitalRead(SIM_MODE_PIN);
   if (previousSimModeButton == HIGH && simModeButton == LOW) {
-    simModeForced = !simModeForced;
+    if (now - lastSimToggleTime > DEBOUNCE_DELAY) {
+      simModeForced = !simModeForced;
+      lastSimToggleTime = now;
+    }
   }
   previousSimModeButton = simModeButton;
   
