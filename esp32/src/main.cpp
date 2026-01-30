@@ -36,10 +36,12 @@ WifiConnection* wifi;
 
 MQTTConnection* mqtt;
 
-unsigned long lastButtonPress = 0;
+unsigned long lastButtonUnitState = 0;
+unsigned long lastButtonDevPress = 0;
 const unsigned long debounceDelay = 500;
 bool lastButtonState = HIGH;
-bool buttonState = HIGH;
+bool buttonUnitState = HIGH;
+bool buttonDevState = HIGH;
 
 void switchtTemp();
 
@@ -76,16 +78,26 @@ void loop() {
 
   mqtt->loop();
 
-  buttonState = digitalRead(BUTTON_LED);
+  buttonUnitState = digitalRead(BUTTON_LED);
+  buttonDevState = digitalRead(BUTTON_DEV);
 
-  if (buttonState == LOW && lastButtonState == HIGH) {
+  if (buttonDevState == LOW && lastButtonDevPress == HIGH) {
     unsigned long currentTime = millis();
-    if (currentTime - lastButtonPress >= debounceDelay) {
-      lastButtonPress = currentTime;
+    if (currentTime - lastButtonDevPress >= debounceDelay) {
+      lastButtonDevPress = currentTime;
+      
+      dht->switchMode();
+    }
+  }
+
+  if (buttonUnitState == LOW && lastButtonUnitState == HIGH) {
+    unsigned long currentTime = millis();
+    if (currentTime - lastButtonUnitState >= debounceDelay) {
+      lastButtonUnitState = currentTime;
       
       dht->switchUnit();
       
-      // Switch LEDs: rouge = Celsius, vert = Fahrenheit
+      // Switch LEDs: red = Celsius, green = Fahrenheit
       if (dht->getUnit() == "C") {
         digitalWrite(RED_LED, HIGH);
         digitalWrite(GREEN_LED, LOW);
@@ -96,7 +108,8 @@ void loop() {
     }
   }
 
-  lastButtonState = buttonState;
+  lastButtonUnitState = buttonUnitState;
+  lastButtonDevPress = buttonDevState;
 
   const float temp = dht->getTemp();
   const String unit = dht->getUnit();
